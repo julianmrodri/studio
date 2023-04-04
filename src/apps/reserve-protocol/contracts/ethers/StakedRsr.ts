@@ -54,9 +54,12 @@ export interface StakedRsrInterface extends utils.Interface {
     'endIdForWithdraw(address)': FunctionFragment;
     'exchangeRate()': FunctionFragment;
     'firstRemainingDraft(uint256,address)': FunctionFragment;
+    'getDraftRSR()': FunctionFragment;
     'getPastEra(uint256)': FunctionFragment;
     'getPastTotalSupply(uint256)': FunctionFragment;
     'getPastVotes(address,uint256)': FunctionFragment;
+    'getStakeRSR()': FunctionFragment;
+    'getTotalDrafts()': FunctionFragment;
     'getVotes(address)': FunctionFragment;
     'increaseAllowance(address,uint256)': FunctionFragment;
     'init(address,string,string,uint48,uint192)': FunctionFragment;
@@ -110,9 +113,12 @@ export interface StakedRsrInterface extends utils.Interface {
       | 'endIdForWithdraw'
       | 'exchangeRate'
       | 'firstRemainingDraft'
+      | 'getDraftRSR'
       | 'getPastEra'
       | 'getPastTotalSupply'
       | 'getPastVotes'
+      | 'getStakeRSR'
+      | 'getTotalDrafts'
       | 'getVotes'
       | 'increaseAllowance'
       | 'init'
@@ -192,12 +198,15 @@ export interface StakedRsrInterface extends utils.Interface {
     functionFragment: 'firstRemainingDraft',
     values: [PromiseOrValue<BigNumberish>, PromiseOrValue<string>],
   ): string;
+  encodeFunctionData(functionFragment: 'getDraftRSR', values?: undefined): string;
   encodeFunctionData(functionFragment: 'getPastEra', values: [PromiseOrValue<BigNumberish>]): string;
   encodeFunctionData(functionFragment: 'getPastTotalSupply', values: [PromiseOrValue<BigNumberish>]): string;
   encodeFunctionData(
     functionFragment: 'getPastVotes',
     values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>],
   ): string;
+  encodeFunctionData(functionFragment: 'getStakeRSR', values?: undefined): string;
+  encodeFunctionData(functionFragment: 'getTotalDrafts', values?: undefined): string;
   encodeFunctionData(functionFragment: 'getVotes', values: [PromiseOrValue<string>]): string;
   encodeFunctionData(
     functionFragment: 'increaseAllowance',
@@ -283,9 +292,12 @@ export interface StakedRsrInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: 'endIdForWithdraw', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'exchangeRate', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'firstRemainingDraft', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'getDraftRSR', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'getPastEra', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'getPastTotalSupply', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'getPastVotes', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'getStakeRSR', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'getTotalDrafts', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'getVotes', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'increaseAllowance', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'init', data: BytesLike): Result;
@@ -609,6 +621,8 @@ export interface StakedRsr extends BaseContract {
       overrides?: CallOverrides,
     ): Promise<[BigNumber]>;
 
+    getDraftRSR(overrides?: CallOverrides): Promise<[BigNumber]>;
+
     getPastEra(blockNumber: PromiseOrValue<BigNumberish>, overrides?: CallOverrides): Promise<[BigNumber]>;
 
     getPastTotalSupply(blockNumber: PromiseOrValue<BigNumberish>, overrides?: CallOverrides): Promise<[BigNumber]>;
@@ -618,6 +632,10 @@ export interface StakedRsr extends BaseContract {
       blockNumber: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides,
     ): Promise<[BigNumber]>;
+
+    getStakeRSR(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    getTotalDrafts(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     getVotes(account: PromiseOrValue<string>, overrides?: CallOverrides): Promise<[BigNumber]>;
 
@@ -813,6 +831,8 @@ export interface StakedRsr extends BaseContract {
     overrides?: CallOverrides,
   ): Promise<BigNumber>;
 
+  getDraftRSR(overrides?: CallOverrides): Promise<BigNumber>;
+
   getPastEra(blockNumber: PromiseOrValue<BigNumberish>, overrides?: CallOverrides): Promise<BigNumber>;
 
   getPastTotalSupply(blockNumber: PromiseOrValue<BigNumberish>, overrides?: CallOverrides): Promise<BigNumber>;
@@ -822,6 +842,10 @@ export interface StakedRsr extends BaseContract {
     blockNumber: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides,
   ): Promise<BigNumber>;
+
+  getStakeRSR(overrides?: CallOverrides): Promise<BigNumber>;
+
+  getTotalDrafts(overrides?: CallOverrides): Promise<BigNumber>;
 
   getVotes(account: PromiseOrValue<string>, overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1014,6 +1038,8 @@ export interface StakedRsr extends BaseContract {
       overrides?: CallOverrides,
     ): Promise<BigNumber>;
 
+    getDraftRSR(overrides?: CallOverrides): Promise<BigNumber>;
+
     getPastEra(blockNumber: PromiseOrValue<BigNumberish>, overrides?: CallOverrides): Promise<BigNumber>;
 
     getPastTotalSupply(blockNumber: PromiseOrValue<BigNumberish>, overrides?: CallOverrides): Promise<BigNumber>;
@@ -1023,6 +1049,10 @@ export interface StakedRsr extends BaseContract {
       blockNumber: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides,
     ): Promise<BigNumber>;
+
+    getStakeRSR(overrides?: CallOverrides): Promise<BigNumber>;
+
+    getTotalDrafts(overrides?: CallOverrides): Promise<BigNumber>;
 
     getVotes(account: PromiseOrValue<string>, overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1340,6 +1370,8 @@ export interface StakedRsr extends BaseContract {
       overrides?: CallOverrides,
     ): Promise<BigNumber>;
 
+    getDraftRSR(overrides?: CallOverrides): Promise<BigNumber>;
+
     getPastEra(blockNumber: PromiseOrValue<BigNumberish>, overrides?: CallOverrides): Promise<BigNumber>;
 
     getPastTotalSupply(blockNumber: PromiseOrValue<BigNumberish>, overrides?: CallOverrides): Promise<BigNumber>;
@@ -1349,6 +1381,10 @@ export interface StakedRsr extends BaseContract {
       blockNumber: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides,
     ): Promise<BigNumber>;
+
+    getStakeRSR(overrides?: CallOverrides): Promise<BigNumber>;
+
+    getTotalDrafts(overrides?: CallOverrides): Promise<BigNumber>;
 
     getVotes(account: PromiseOrValue<string>, overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1545,6 +1581,8 @@ export interface StakedRsr extends BaseContract {
       overrides?: CallOverrides,
     ): Promise<PopulatedTransaction>;
 
+    getDraftRSR(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     getPastEra(blockNumber: PromiseOrValue<BigNumberish>, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     getPastTotalSupply(
@@ -1557,6 +1595,10 @@ export interface StakedRsr extends BaseContract {
       blockNumber: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides,
     ): Promise<PopulatedTransaction>;
+
+    getStakeRSR(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    getTotalDrafts(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     getVotes(account: PromiseOrValue<string>, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 

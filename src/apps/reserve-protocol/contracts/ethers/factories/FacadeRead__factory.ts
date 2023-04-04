@@ -15,6 +15,25 @@ const _abi = [
   {
     inputs: [
       {
+        internalType: 'contract ITrading',
+        name: 'trader',
+        type: 'address',
+      },
+    ],
+    name: 'auctionsSettleable',
+    outputs: [
+      {
+        internalType: 'contract IERC20[]',
+        name: 'erc20s',
+        type: 'address[]',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
         internalType: 'contract IRToken',
         name: 'rToken',
         type: 'address',
@@ -137,6 +156,11 @@ const _abi = [
         internalType: 'uint256[]',
         name: 'deposits',
         type: 'uint256[]',
+      },
+      {
+        internalType: 'uint192[]',
+        name: 'depositsUoA',
+        type: 'uint192[]',
       },
     ],
     stateMutability: 'nonpayable',
@@ -313,6 +337,40 @@ const _abi = [
         internalType: 'contract IStRSR',
         name: 'stTokenAddress',
         type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'contract IRToken',
+        name: 'rToken',
+        type: 'address',
+      },
+      {
+        internalType: 'contract ITrading',
+        name: 'trader',
+        type: 'address',
+      },
+    ],
+    name: 'traderBalances',
+    outputs: [
+      {
+        internalType: 'contract IERC20[]',
+        name: 'erc20s',
+        type: 'address[]',
+      },
+      {
+        internalType: 'uint256[]',
+        name: 'balances',
+        type: 'uint256[]',
+      },
+      {
+        internalType: 'uint256[]',
+        name: 'balancesNeeded',
+        type: 'uint256[]',
       },
     ],
     stateMutability: 'view',

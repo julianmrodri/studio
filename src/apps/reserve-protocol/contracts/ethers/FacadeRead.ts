@@ -33,6 +33,7 @@ export declare namespace IFacadeRead {
 
 export interface FacadeReadInterface extends utils.Interface {
   functions: {
+    'auctionsSettleable(address)': FunctionFragment;
     'backingOverview(address)': FunctionFragment;
     'backupConfig(address,bytes32)': FunctionFragment;
     'basketBreakdown(address)': FunctionFragment;
@@ -44,10 +45,12 @@ export interface FacadeReadInterface extends utils.Interface {
     'primeBasket(address)': FunctionFragment;
     'redeem(address,uint256,uint48)': FunctionFragment;
     'stToken(address)': FunctionFragment;
+    'traderBalances(address,address)': FunctionFragment;
   };
 
   getFunction(
     nameOrSignatureOrTopic:
+      | 'auctionsSettleable'
       | 'backingOverview'
       | 'backupConfig'
       | 'basketBreakdown'
@@ -58,9 +61,11 @@ export interface FacadeReadInterface extends utils.Interface {
       | 'price'
       | 'primeBasket'
       | 'redeem'
-      | 'stToken',
+      | 'stToken'
+      | 'traderBalances',
   ): FunctionFragment;
 
+  encodeFunctionData(functionFragment: 'auctionsSettleable', values: [PromiseOrValue<string>]): string;
   encodeFunctionData(functionFragment: 'backingOverview', values: [PromiseOrValue<string>]): string;
   encodeFunctionData(
     functionFragment: 'backupConfig',
@@ -81,7 +86,12 @@ export interface FacadeReadInterface extends utils.Interface {
     values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>],
   ): string;
   encodeFunctionData(functionFragment: 'stToken', values: [PromiseOrValue<string>]): string;
+  encodeFunctionData(
+    functionFragment: 'traderBalances',
+    values: [PromiseOrValue<string>, PromiseOrValue<string>],
+  ): string;
 
+  decodeFunctionResult(functionFragment: 'auctionsSettleable', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'backingOverview', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'backupConfig', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'basketBreakdown', data: BytesLike): Result;
@@ -93,6 +103,7 @@ export interface FacadeReadInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: 'primeBasket', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'redeem', data: BytesLike): Result;
   decodeFunctionResult(functionFragment: 'stToken', data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: 'traderBalances', data: BytesLike): Result;
 
   events: {};
 }
@@ -120,6 +131,11 @@ export interface FacadeRead extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
+    auctionsSettleable(
+      trader: PromiseOrValue<string>,
+      overrides?: CallOverrides,
+    ): Promise<[string[]] & { erc20s: string[] }>;
+
     backingOverview(
       rToken: PromiseOrValue<string>,
       overrides?: CallOverrides,
@@ -189,7 +205,21 @@ export interface FacadeRead extends BaseContract {
     ): Promise<ContractTransaction>;
 
     stToken(rToken: PromiseOrValue<string>, overrides?: CallOverrides): Promise<[string] & { stTokenAddress: string }>;
+
+    traderBalances(
+      rToken: PromiseOrValue<string>,
+      trader: PromiseOrValue<string>,
+      overrides?: CallOverrides,
+    ): Promise<
+      [string[], BigNumber[], BigNumber[]] & {
+        erc20s: string[];
+        balances: BigNumber[];
+        balancesNeeded: BigNumber[];
+      }
+    >;
   };
+
+  auctionsSettleable(trader: PromiseOrValue<string>, overrides?: CallOverrides): Promise<string[]>;
 
   backingOverview(
     rToken: PromiseOrValue<string>,
@@ -257,7 +287,21 @@ export interface FacadeRead extends BaseContract {
 
   stToken(rToken: PromiseOrValue<string>, overrides?: CallOverrides): Promise<string>;
 
+  traderBalances(
+    rToken: PromiseOrValue<string>,
+    trader: PromiseOrValue<string>,
+    overrides?: CallOverrides,
+  ): Promise<
+    [string[], BigNumber[], BigNumber[]] & {
+      erc20s: string[];
+      balances: BigNumber[];
+      balancesNeeded: BigNumber[];
+    }
+  >;
+
   callStatic: {
+    auctionsSettleable(trader: PromiseOrValue<string>, overrides?: CallOverrides): Promise<string[]>;
+
     backingOverview(
       rToken: PromiseOrValue<string>,
       overrides?: CallOverrides,
@@ -291,7 +335,13 @@ export interface FacadeRead extends BaseContract {
       rToken: PromiseOrValue<string>,
       amount: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides,
-    ): Promise<[string[], BigNumber[]] & { tokens: string[]; deposits: BigNumber[] }>;
+    ): Promise<
+      [string[], BigNumber[], BigNumber[]] & {
+        tokens: string[];
+        deposits: BigNumber[];
+        depositsUoA: BigNumber[];
+      }
+    >;
 
     maxIssuable(
       rToken: PromiseOrValue<string>,
@@ -335,11 +385,25 @@ export interface FacadeRead extends BaseContract {
     >;
 
     stToken(rToken: PromiseOrValue<string>, overrides?: CallOverrides): Promise<string>;
+
+    traderBalances(
+      rToken: PromiseOrValue<string>,
+      trader: PromiseOrValue<string>,
+      overrides?: CallOverrides,
+    ): Promise<
+      [string[], BigNumber[], BigNumber[]] & {
+        erc20s: string[];
+        balances: BigNumber[];
+        balancesNeeded: BigNumber[];
+      }
+    >;
   };
 
   filters: {};
 
   estimateGas: {
+    auctionsSettleable(trader: PromiseOrValue<string>, overrides?: CallOverrides): Promise<BigNumber>;
+
     backingOverview(rToken: PromiseOrValue<string>, overrides?: CallOverrides): Promise<BigNumber>;
 
     backupConfig(
@@ -385,9 +449,17 @@ export interface FacadeRead extends BaseContract {
     ): Promise<BigNumber>;
 
     stToken(rToken: PromiseOrValue<string>, overrides?: CallOverrides): Promise<BigNumber>;
+
+    traderBalances(
+      rToken: PromiseOrValue<string>,
+      trader: PromiseOrValue<string>,
+      overrides?: CallOverrides,
+    ): Promise<BigNumber>;
   };
 
   populateTransaction: {
+    auctionsSettleable(trader: PromiseOrValue<string>, overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     backingOverview(rToken: PromiseOrValue<string>, overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     backupConfig(
@@ -433,5 +505,11 @@ export interface FacadeRead extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     stToken(rToken: PromiseOrValue<string>, overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    traderBalances(
+      rToken: PromiseOrValue<string>,
+      trader: PromiseOrValue<string>,
+      overrides?: CallOverrides,
+    ): Promise<PopulatedTransaction>;
   };
 }
