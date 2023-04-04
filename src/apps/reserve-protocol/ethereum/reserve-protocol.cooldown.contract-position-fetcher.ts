@@ -28,6 +28,12 @@ export type StakedRsrDataProps = DefaultDataProps & {
   inCoolDownTotalBalance: number;
 };
 
+enum CollateralStatus {
+  SOUND,
+  IFFY,
+  DISABLED,
+}
+
 @PositionTemplate()
 export class EthereumReserveProtocolCooldownContractPositionFetcher extends ContractPositionTemplatePositionFetcher<Contract> {
   groupLabel = 'Unstaked RSR in Cooldown';
@@ -122,15 +128,20 @@ export class EthereumReserveProtocolCooldownContractPositionFetcher extends Cont
     const blockNumber = await provider.getBlockNumber();
     const timestamp = (await provider.getBlock(blockNumber)).timestamp;
 
-    // Process pending unstakings
+    // Check if claiming is disabled
     const fullyCollateralized = await bh.fullyCollateralized();
+    const basketSound = (await bh.status()) == CollateralStatus.SOUND;
+    const mainPausedOrFrozen = await main.pausedOrFrozen();
+    const claimingDisabled = !fullyCollateralized || !basketSound || mainPausedOrFrozen;
+
+    // Process pending unstakings
     const pendingUnstakings = await facadeRead.pendingUnstakings(rToken.address, address);
 
     let lockedBalance = BigNumber.from(0);
     let claimableBalance = BigNumber.from(0);
 
     pendingUnstakings.forEach(unstake => {
-      if (!fullyCollateralized || Number(unstake.availableAt) > timestamp) {
+      if (claimingDisabled || Number(unstake.availableAt) > timestamp) {
         lockedBalance = lockedBalance.add(unstake.amount);
       } else {
         claimableBalance = claimableBalance.add(unstake.amount);
