@@ -14,7 +14,7 @@ import { getRTokens, RTokens } from './reserve-protocol.staked-rsr.queries';
 
 @PositionTemplate()
 export class EthereumReserveProtocolStakedRsrTokenFetcher extends AppTokenTemplatePositionFetcher<StakedRsr> {
-  groupLabel: string;
+  groupLabel = 'Staked RSR';
 
   constructor(
     @Inject(APP_TOOLKIT) protected readonly appToolkit: IAppToolkit,
